@@ -4,7 +4,6 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Runtime.Caching;
-using MyShop.Core;
 using MyShop.Core.Models;
 
 namespace MyShop.DataAccess.InMemory
@@ -13,7 +12,7 @@ namespace MyShop.DataAccess.InMemory
     {
         ObjectCache cache = MemoryCache.Default;
         List<Product> products;
-       
+
         public ProductRepository()
         {
             products = cache["products"] as List<Product>;
@@ -22,10 +21,10 @@ namespace MyShop.DataAccess.InMemory
                 products = new List<Product>();
             }
         }
-        
+
         public void Commit()
         {
-            cache["Products"] = products;
+            cache["products"] = products;
         }
 
         public void Insert(Product p)
@@ -35,14 +34,15 @@ namespace MyShop.DataAccess.InMemory
 
         public void Update(Product product)
         {
-            Product ProductToUpdate = products.Find(p => p.Id == product.Id);
-            if(ProductToUpdate !=null)
+            Product productToUpdate = products.Find(p => p.Id == product.Id);
+
+            if (productToUpdate != null)
             {
-                ProductToUpdate = product;
+                productToUpdate = product;
             }
             else
             {
-                throw new Exception("product not found");
+                throw new Exception("Product no found");
             }
         }
 
@@ -54,14 +54,12 @@ namespace MyShop.DataAccess.InMemory
             {
                 return product;
             }
-
             else
             {
-                throw new  Exception("product not found");
+                throw new Exception("Product no found");
             }
-
         }
-//returns a list that could be queried
+
         public IQueryable<Product> Collection()
         {
             return products.AsQueryable();
@@ -69,16 +67,15 @@ namespace MyShop.DataAccess.InMemory
 
         public void Delete(string Id)
         {
-            Product ProductToDelete = products.Find(p => p.Id == Id);
+            Product productToDelete = products.Find(p => p.Id == Id);
 
-            if (ProductToDelete != null)
+            if (productToDelete != null)
             {
-                products.Remove(ProductToDelete);
+                products.Remove(productToDelete);
             }
-
             else
             {
-                throw new Exception("product not found");
+                throw new Exception("Product no found");
             }
         }
     }
